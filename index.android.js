@@ -8,6 +8,7 @@ import {
   View
 } from 'react-native';
 
+const VerticalsList = require('./Components/Verticals/List')
 const Login = require('./Components/login/Login')
 const AppContainer = require('./Components/AppContainer/AppContainer')
 
@@ -19,7 +20,8 @@ var TSI2 = React.createClass({
       );
     } else {
       return (
-        <Login onLogin={this.onLogin}></Login>
+        <VerticalsList></VerticalsList>
+        //<Login onLogin={this.onLogin}></Login>
       );
     }
   },

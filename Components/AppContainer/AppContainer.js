@@ -12,7 +12,12 @@ class AppContainer extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-
+      region: {
+              latitude: -34.917678,
+              longitude: -56.166401,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
+            }
     }
   }
 
@@ -20,12 +25,7 @@ class AppContainer extends React.Component {
     return (
       <View style = {styles.container}>
         <MapView style={styles.map}
-          initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
+          region={this.state.region}
         />
       </View>
     );
