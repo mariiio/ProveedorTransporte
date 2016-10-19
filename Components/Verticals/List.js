@@ -11,22 +11,53 @@ var {
   Image
 } = ReactNative;
 
+const Vertical = require('./Vertical');
+
+var verticales = [];
+
 class List extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows(['Limosina', 'Caballo','Lancha']),
-    };
+     this.state = {
+       dataSource: ds,
+     loaded: false
+      };
+  }
+
+   componentDidMount() {
+    this.getVerticals();
+  }
+
+    getVerticals() {
+    fetch('http://yubertransport.mybluemix.net/YuberServices/rest/user/verticales')
+      .then((response) => response.json())
+      .then((responseData) => {
+        verticales = responseData.verticales;
+        var nombres = [];
+        for (var i = 0; i < verticales.length; i++) {
+          nombres[i] = verticales[i].nombre;
+        }
+        console.log(responseData.verticales);
+          this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(nombres),
+            loaded: true,
+          });
+      })
+      .done();
+  }
+
+  goToVertical(id:number){
+
   }
 
   render() {
     return (
       <View style={styles.container}>
       <Image style={styles.Image} source={require('../../Images/yuber.png')} />
-      <ListView
+      <ListView 
         dataSource={this.state.dataSource}
-        renderRow={this._renderRow}
+        renderRow={this._renderRow.bind(this)}
       />
       </View>
     );
@@ -36,7 +67,7 @@ class List extends React.Component {
     return (
       <TouchableHighlight onPress={() => {
           highlightRow(sectionID, rowID);
-          //REDIRECT
+          this.goToVertical(1);
         }}>
         <View>
           <View style={styles.row}>
@@ -71,6 +102,5 @@ class List extends React.Component {
     fontSize: 30,
   },
 });
-
 
 module.exports = List;

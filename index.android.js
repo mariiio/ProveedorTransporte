@@ -5,37 +5,18 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
+  Navigator,
   View
 } from 'react-native';
 
 const VerticalsList = require('./Components/Verticals/List')
-const Login = require('./Components/login/Login')
-const AppContainer = require('./Components/AppContainer/AppContainer')
 
 var TSI2 = React.createClass({
   render: function() {
-    if (this.state.isLoggedIn) {
-      return (
-        <AppContainer></AppContainer>
-      );
-    } else {
       return (
         <VerticalsList></VerticalsList>
-        //<Login onLogin={this.onLogin}></Login>
-      );
-    }
-  },
-
-  onLogin: function() {
-    this.setState({isLoggedIn: true});
-  },
-
-  getInitialState : function() {
-    return {
-      isLoggedIn: false   
-    }
-  }
-});
+    )}
+  });
 
 const styles = StyleSheet.create({
   container:{
