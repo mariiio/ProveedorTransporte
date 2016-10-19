@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Image
 } from 'react-native';
+import NavigationBar from 'react-native-navbar';
 
 class Login extends React.Component {
   constructor(props){
@@ -32,23 +33,32 @@ class Login extends React.Component {
        </Text>; 
     }
 
+  var leftButtonConfig = {
+    title: '< Verticales',
+    handler: function onNext() {
+      alert('GO BACK!');
+    }
+  };
+
     return(
       <View style={styles.container}>
+      <NavigationBar
+        rightButton={leftButtonConfig} />
 
-        <Image source={require('../../Images/logo.png')} />
+        <Image style={styles.logo} source={{uri: this.props.vertical.urlLogo}}/>
 
         <Text style={styles.heading}>Username</Text>
-        <TextInput style={styles.input}
+        <TextInput style={[styles.input,{borderColor: this.props.vertical.color}]}
           onChangeText = {(text) => this.setState({username: text})}
           placeholder = "Mario" />
 
         <Text style={styles.heading}>Password</Text>
-        <TextInput style={styles.input}
+        <TextInput style={[styles.input,{borderColor: this.props.vertical.color}]}
           onChangeText = {(text) => this.setState({password: text})}
           placeholder = "Password" 
           secureTextEntry = {true} />
 
-        <TouchableHighlight style={styles.button}
+        <TouchableHighlight style={[styles.button, {backgroundColor: this.props.vertical.color}]}
           onPress = {this.onLogInPress.bind(this)}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableHighlight>
@@ -97,8 +107,8 @@ const styles = StyleSheet.create({
   },
   button: {
      height: 50,
-     backgroundColor: '#48bbec',
-     alignSelf: 'stretch',
+     // backgroundColor: '#48bbec',
+     width: 100,
      marginTop: 20,
      justifyContent: 'center'
   },
@@ -110,14 +120,18 @@ const styles = StyleSheet.create({
   loader: {
      
   },
+  logo: {
+    width: 150,
+    height: 150
+  },
   input: {
      height: 50,
-     alignSelf: 'stretch',
+     width: 250,
      marginTop: 10,
      padding: 4,
      fontSize: 18,
      borderWidth: 1,
-     borderColor: '#48bbec'
+     //borderColor: '#48bbec'
   },
   error: {
     color: 'red'

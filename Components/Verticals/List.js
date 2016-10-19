@@ -48,29 +48,34 @@ class List extends React.Component {
   }
 
   goToVertical(id:number){
-
+    this.setState({vertical : id});
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-      <Image style={styles.Image} source={require('../../Images/yuber.png')} />
-      <ListView 
-        dataSource={this.state.dataSource}
-        renderRow={this._renderRow.bind(this)}
-      />
-      </View>
-    );
+    if (this.state.vertical){
+      return <Vertical vertical={verticales[this.state.vertical]}></Vertical>
+    }else{
+      return (
+        <View style={styles.container}>
+        <Image style={styles.Image} source={require('../../Images/yuber.png')} />
+        <ListView 
+          dataSource={this.state.dataSource}
+          renderRow={this._renderRow.bind(this)}
+        />
+        </View>
+      );
+    }
   }
 
   _renderRow(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
     return (
       <TouchableHighlight onPress={() => {
           highlightRow(sectionID, rowID);
-          this.goToVertical(1);
+          this.goToVertical(rowID);
         }}>
         <View>
           <View style={styles.row}>
+            <Image style={styles.imageRow} source={{uri: verticales[rowID].urlLogo}} />
             <Text style={styles.text}>
               {rowData}
             </Text>
@@ -88,6 +93,11 @@ class List extends React.Component {
     backgroundColor: 'white',
     padding: 10,
   },
+  imageRow:{
+    width:40,
+    height:40,
+    padding: 10
+  },
   Image:{
     alignSelf: 'center'
   },
@@ -100,6 +110,7 @@ class List extends React.Component {
   text: {
     flex: 1,
     fontSize: 30,
+    padding: 5
   },
 });
 
