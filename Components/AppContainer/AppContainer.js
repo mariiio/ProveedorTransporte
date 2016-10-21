@@ -15,9 +15,22 @@ class AppContainer extends React.Component {
       region: {
               latitude: -34.917678,
               longitude: -56.166401,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421
-            }
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01
+            },
+      markers: [{
+        latlng: {latitude: -34.917678,
+              longitude: -56.166401},
+            title: 'title',
+            description: 'description'
+      },
+      { 
+      latlng: {latitude: -34.917900,
+              longitude: -56.166900},
+            title: 'title',
+            description: 'description'
+      }
+      ]
     }
   }
 
@@ -26,7 +39,17 @@ class AppContainer extends React.Component {
       <View style = {styles.container}>
         <MapView style={styles.map}
           region={this.state.region}
+          showsUserLocation={true}
+          followUserLocation={true}
+        >
+        {this.state.markers.map(marker => (
+        <MapView.Marker
+          coordinate={marker.latlng}
+          title={marker.title}
+          description={marker.description}
         />
+  ))}
+         </MapView>
       </View>
     );
   }

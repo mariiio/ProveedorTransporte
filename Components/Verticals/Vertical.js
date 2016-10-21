@@ -6,7 +6,6 @@ import {
   Text,
   View
 } from 'react-native';
-import NavigationBar from 'react-native-navbar';
 
 const Login = require('../login/Login')
 const AppContainer = require('../AppContainer/AppContainer')
@@ -15,7 +14,7 @@ var Vertical = React.createClass({
   render: function() {
     if (this.state.isLoggedIn) {
       return (
-        <AppContainer></AppContainer>
+        <AppContainer vertical={this.props.vertical}></AppContainer>
       );
     } else {
       return (
