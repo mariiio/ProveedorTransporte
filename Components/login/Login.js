@@ -42,7 +42,7 @@ class Login extends React.Component {
 
     return(
       <View style={styles.container}>
-      <NavigationBar style={{margin: 18}}
+      <NavigationBar style={{margin: 20}}
         rightButton={leftButtonConfig} />
 
         <Image style={styles.logo} source={{uri: this.props.vertical.urlLogo}}/>
