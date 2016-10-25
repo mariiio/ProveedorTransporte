@@ -87,7 +87,7 @@ class Login extends React.Component {
       }, results));
 
       if (results.success && this.props.onLogin){
-        this.props.onLogin();
+        this.props.onLogin(this.state.username);
       }
     });
   }
