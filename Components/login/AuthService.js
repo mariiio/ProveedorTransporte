@@ -6,7 +6,7 @@ class AuthService {
 		var b = new buffer.Buffer(creds.username + ':' + creds.password);
 		var encodedAuth = b.toString('base64');
 
-		fetch('http://yubertransport.mybluemix.net/YuberServices/rest/user/', {
+		fetch('http://yubertransport.mybluemix.net/TransportServices/rest/user/verticales', { //cambiar por api login
 	      // headers: {
 	      //   'AuthorizationToken' : encodedAuth
 	      // }
