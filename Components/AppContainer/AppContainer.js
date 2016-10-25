@@ -12,17 +12,15 @@ class AppContainer extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      region: {
-              latitude: -34.917678,
-              longitude: -56.166401,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01
-            },
+      // region: {
+      //         latitude: -34.917678,
+      //         longitude: -56.166401,
+      //         latitudeDelta: 0.01,
+      //         longitudeDelta: 0.01
+      //       }, <- FING
+      ws : null,
 
       onService : false,
-
-      trueSwitchIsOn: true,
-      falseSwitchIsOn: false,
 
       markers: [{
         latlng: {latitude: -34.917678,
@@ -40,6 +38,26 @@ class AppContainer extends React.Component {
     }
   }
 
+  componentWillMount() {
+      this._setPosition();
+  }
+
+  _setPosition() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords);
+          this.setState({
+              region: {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01
+            }
+          });
+      }, (error) => {
+          alert(error)
+      }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
+  }
+
   render() {
     return (
       <View style = {styles.container}>
@@ -55,6 +73,7 @@ class AppContainer extends React.Component {
             coordinate={marker.latlng}
             title={marker.title}
             description={marker.description}
+            //image={require('../../Images/pin.png')}
           />
         ))}
         </MapView>
@@ -71,9 +90,20 @@ class AppContainer extends React.Component {
   onPress(){
     this.setState({onService : !this.state.onService})
     if (this.state.onService) {
-
+      if (this.state.ws) {
+        this.state.ws.close();
+      }
     } else {
-
+      var ws = new WebSocket('ws://yubertransport.mybluemix.net/WebSocketServer/servicio');
+      // var obj = '{'
+      //      +'"command" : "ClienteNuevo",'
+      //      +'"userName"  : "mario",'
+      //      +'"lat" : '+this.state.region.latitude+' ,'
+      //      +'"lng" : '+this.state.region.longitude
+      //     +'}';
+      // ws.send(obj)
+      ws.onmessage = ((msg) => {this.setState({output: this.state.output + msg.data})});
+      this.setState({ws: ws});
     }
   }
 
