@@ -24,7 +24,7 @@ class AppContainer extends React.Component {
 
       client: {lat: null,
                 lng: null,
-                userName: null,
+                username: null,
                 address: null},
 
       modalVisible: false,
@@ -80,7 +80,7 @@ class AppContainer extends React.Component {
           >
          <View style={styles.modal}>
           <View>
-            <Text style={styles.textModal}>El usuario {this.state.client.userName} se encuentra en {this.state.client.address} y ha solicitado tu servicio</Text>
+            <Text style={styles.textModal}>El usuario {this.state.client.username} se encuentra en {this.state.client.address} y ha solicitado tu servicio</Text>
 
             <TouchableHighlight style={[styles.button,{backgroundColor: 'green'}]} onPress={() => {
               this.setState({modalVisible: false});
@@ -151,7 +151,7 @@ class AppContainer extends React.Component {
               } else if (mensaje.respuesta.command == 'SolicitudMatch') {
                 this.setState({client: { lat: mensaje.respuesta.lat,
                                          lng: mensaje.respuesta.lng,
-                                         userName: mensaje.respuesta.userName,
+                                         username: mensaje.respuesta.username,
                                          address: mensaje.respuesta.address}});
                 this.setState({modalVisible: true});
               }
@@ -160,7 +160,7 @@ class AppContainer extends React.Component {
           ws.onopen = () => {
             var obj = '{'
                 +'"command" : "ProveedorDisponible",'
-                +'"userName"  : "mario",' //this.props.user
+                +'"username"  : "mario",' //this.props.user
                 +'"lat" : '+this.state.region.latitude+' ,'
                 +'"lng" : '+this.state.region.longitude
                +'}';
@@ -186,12 +186,12 @@ class AppContainer extends React.Component {
           // });
             var obj = '{'
                 +'"command" : "ProveedorPosicion",'
-                //+'"userName"  : "mario",' //this.props.user
+                //+'"username"  : "mario",' //this.props.user
                 //+'"client"  : this.state.client,'
                 +'"lat" : '+position.coords.latitude+' ,'
                 +'"lng" : '+position.coords.longitude
                +'}';
-            if (ws.readyState == 1 && this.props.client){
+            if (ws.readyState == 1 && this.state.client){
               ws.send(obj);
             }
         });

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 const Login = require('../login/Login')
+const Register = require('../login/Register')
 const AppContainer = require('../AppContainer/AppContainer')
 
 var Vertical = React.createClass({
@@ -16,9 +17,13 @@ var Vertical = React.createClass({
       return (
         <AppContainer vertical={this.props.vertical} user={this.state.user}></AppContainer>
       );
+    } else if (this.state.register) {
+      return(
+        <Register vertical={this.props.vertical} onRegister={()=>this.onRegister()} onLogin={()=>this.onRegister()}></Register>
+      )
     } else {
       return (
-        <Login vertical={this.props.vertical} onLogin={(user)=>this.onLogin(user)}></Login>
+        <Login vertical={this.props.vertical} onRegister={()=>this.onRegister()} onLogin={(user)=>this.onLogin(user)}></Login>
       );
     }
   },
@@ -28,9 +33,15 @@ var Vertical = React.createClass({
     this.setState({user: user});
   },
 
+
+  onRegister: function() {
+    this.setState({register: !this.state.register});
+  },
+
   getInitialState : function() {
     return {
-      isLoggedIn: false   
+      isLoggedIn: false,
+      register: false 
     }
   }
 });
