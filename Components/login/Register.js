@@ -10,22 +10,20 @@ import {
 } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 
-class Login extends React.Component {
+class Register extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      showProgress: false
+      showProgress: false,
+      username: '',
+      phone: '',
+      password: '',
+      passwordConfirmation: ''
     }
   }
 
   render() {
     var errorCtrl = <View />;
-
-    if (!this.state.success && this.state.badCredentials) {
-      errorCtrl = <Text style={styles.error}>
-        That username and password didn't work
-       </Text>; 
-    }
 
     if (!this.state.success && this.state.unknownError){
       errorCtrl = <Text style={styles.error}>
@@ -33,24 +31,18 @@ class Login extends React.Component {
        </Text>; 
     }
 
-  var leftButtonConfig = {
-    title: '< Verticales',
-    handler: function onNext() {
-      alert('GO BACK!');
-    }
-  };
-
     return(
       <View style={styles.container}>
-      <NavigationBar style={{margin: 20}}
-        leftButton={leftButtonConfig} />
-
-        <Image style={styles.logo} source={{uri: this.props.vertical.urlLogo}}/>
 
         <Text style={styles.heading}>Username</Text>
         <TextInput style={[styles.input,{borderColor: this.props.vertical.color}]}
           onChangeText = {(text) => this.setState({username: text})}
           placeholder = "Mario" />
+
+        <Text style={styles.heading}>Phone number</Text>
+        <TextInput style={[styles.input,{borderColor: this.props.vertical.color}]}
+          onChangeText = {(text) => this.setState({phone: text})}
+          placeholder = "123456789" />
 
         <Text style={styles.heading}>Password</Text>
         <TextInput style={[styles.input,{borderColor: this.props.vertical.color}]}
@@ -58,16 +50,22 @@ class Login extends React.Component {
           placeholder = "Password" 
           secureTextEntry = {true} />
 
+        <Text style={styles.heading}>Confirm password</Text>
+        <TextInput style={[styles.input,{borderColor: this.props.vertical.color}]}
+          onChangeText = {(text) => this.setState({passwordConfirmation: text})}
+          placeholder = "Password" 
+          secureTextEntry = {true} />
+
         <TouchableHighlight style={[styles.button, {backgroundColor: this.props.vertical.color}]}
-          onPress = {this.onLogInPress.bind(this)}>
-          <Text style={styles.buttonText}>Log in</Text>
+          onPress = {this.onRegisterPress.bind(this)}>
+          <Text style={styles.buttonText}>Register</Text>
         </TouchableHighlight>
 
         {errorCtrl}
 
-        <TouchableHighlight style={styles.registerButton}
-          onPress = {this.props.onRegister}>
-          <Text style={styles.buttonText}>Registrar</Text>
+        <TouchableHighlight style={styles.loginButton}
+          onPress = {this.props.onLogin}>
+          <Text style={styles.buttonText}>Log in</Text>
         </TouchableHighlight>
 
         <ActivityIndicator
@@ -78,23 +76,34 @@ class Login extends React.Component {
     );
   }
 
-  onLogInPress(){
+    onRegisterPress(){
+    if (this.state.username == '' || this.state.phone == '' || this.state.password == '' || this.state.passwordConfirmation == '') {
+      errorCtrl = <Text style={styles.error}>
+        Please fill all the fields
+       </Text>; 
+    } else if (this.state.passwordConfirmation != this.state.password){
+       errorCtrl = <Text style={styles.error}>
+        Passwords don't match
+       </Text>; 
+    } else {
     this.setState({showProgress: true});
-    console.log('Attempting to log in with username: ' + this.state.username + ' and password: ' + this.state.password);
+    console.log('Attempting to register username: ' + this.state.username + ' and password: ' + this.state.password);
 
     var authService = require('./AuthService');
-    authService.login({
+    authService.register({
       username: this.state.username,
+      phone: this.state.phone,
       password: this.state.password
     }, (results) => {
       this.setState(Object.assign({
           showProgress: false
       }, results));
 
-      if (results.success && this.props.onLogin){
-        this.props.onLogin(this.state.username);
+      if (results.success && this.props.onRegister){
+        this.props.onRegister();
       }
     });
+  }
   }
 }
 
@@ -117,7 +126,7 @@ const styles = StyleSheet.create({
      marginTop: 20,
      justifyContent: 'center'
   },
-  registerButton: {
+  loginButton: {
      height: 40,
      backgroundColor: '#48bbec',
      width: 130,
@@ -150,4 +159,4 @@ const styles = StyleSheet.create({
   }
 });
 
-module.exports = Login;
+module.exports = Register;
