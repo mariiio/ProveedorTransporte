@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import StarRating from 'react-native-star-rating';
+const History = require('./History')
 
 class AppContainer extends React.Component {
   constructor(props){
@@ -31,6 +32,8 @@ class AppContainer extends React.Component {
       modalVisible: false,
       
       modalReviewVisible: false,
+
+      History: false,
 
       starCount: 3,
 
@@ -74,105 +77,123 @@ class AppContainer extends React.Component {
   }
 
   render() {
-    return (
-      <View style = {styles.container}>
+    if (!this.state.History) {
+      return (
+        <View style = {styles.container}>
 
-        <Modal
-          animationType={"fade"}
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {}}
-          >
-         <View style={styles.modal}>
-          <View>
-            <Text style={styles.textModal}>El usuario {this.state.client.username} se encuentra en {this.state.client.address} y ha solicitado tu servicio</Text>
+          <Modal
+            animationType={"fade"}
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {}}
+            >
+           <View style={styles.modal}>
+            <View>
+              <Text style={styles.textModal}>El usuario {this.state.client.username} se encuentra en {this.state.client.address} y ha solicitado tu servicio</Text>
 
-            <TouchableHighlight style={[styles.button,{backgroundColor: 'green'}]} onPress={() => {
-              this.setState({modalVisible: false});
-              this.setState({withClient: 1});
-              var obj = '{'
-                        + '"command" : "ProveedorAcceptMatch"'
-                        +'}';
-              this.state.ws.send(obj);
-            }}>
-              <Text style={styles.buttonText} >Aceptar</Text>
-            </TouchableHighlight>
-
-            <TouchableHighlight style={[styles.button,{backgroundColor: 'red'}]} onPress={() => {
-              this.setState({modalVisible: false});
-              this.setState({withClient: 0});
-              var obj = '{'
-                        + '"command" : "ProveedorDeclineMatch"'
-                        +'}';
-              this.state.ws.send(obj);
-            }}>
-              <Text style={styles.buttonText} >Cancelar</Text>
-            </TouchableHighlight>
-
-          </View>
-         </View>
-        </Modal>
-
-        <Modal
-          animationType={"fade"}
-          transparent={true}
-          visible={this.state.modalReviewVisible}
-          onRequestClose={() => {}}
-          >
-         <View style={styles.modal}>
-          <View>
-            <Text style={styles.textModal}>Califica tu experiencia con {this.state.client.username}</Text>
-            <StarRating 
-              disabled={false}
-              maxStars={5}
-              rating={this.state.starCount}
-              selectedStar={(rating) => this.onStarRatingPress(rating)}
-            />
-            <TouchableHighlight style={[styles.button,{backgroundColor: 'black'}]} onPress={() => {
-              this.setState({modalReviewVisible: false});
-              this.setState({withClient: 0});
-              var obj = '{'
-                    +'"command" : "FinalizarServicio",'
-                    +'"rating" : '+this.state.starCount
-                   +'}';
-              this.state.ws.send(obj);
+              <TouchableHighlight style={[styles.button,{backgroundColor: 'green'}]} onPress={() => {
+                this.setState({modalVisible: false});
+                this.setState({withClient: 1});
+                var obj = '{'
+                          + '"command" : "ProveedorAcceptMatch"'
+                          +'}';
+                this.state.ws.send(obj);
               }}>
-              <Text style={styles.buttonText} >Enviar</Text>
+                <Text style={styles.buttonText} >Aceptar</Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight style={[styles.button,{backgroundColor: 'red'}]} onPress={() => {
+                this.setState({modalVisible: false});
+                this.setState({withClient: 0});
+                var obj = '{'
+                          + '"command" : "ProveedorDeclineMatch"'
+                          +'}';
+                this.state.ws.send(obj);
+              }}>
+                <Text style={styles.buttonText} >Cancelar</Text>
+              </TouchableHighlight>
+
+            </View>
+           </View>
+          </Modal>
+
+          <Modal
+            animationType={"fade"}
+            transparent={true}
+            visible={this.state.modalReviewVisible}
+            onRequestClose={() => {}}
+            >
+           <View style={styles.modal}>
+            <View>
+              <Text style={styles.textModal}>Califica tu experiencia con {this.state.client.username}</Text>
+              <StarRating 
+                disabled={false}
+                maxStars={5}
+                rating={this.state.starCount}
+                selectedStar={(rating) => this.onStarRatingPress(rating)}
+              />
+              <TouchableHighlight style={[styles.button,{backgroundColor: 'black'}]} onPress={() => {
+                this.setState({modalReviewVisible: false});
+                this.setState({withClient: 0});
+                var obj = '{'
+                      +'"command" : "FinalizarServicio",'
+                      +'"rating" : '+this.state.starCount
+                     +'}';
+                this.state.ws.send(obj);
+                }}>
+                <Text style={styles.buttonText} >Enviar</Text>
+              </TouchableHighlight>
+
+            </View>
+           </View>
+          </Modal>
+
+          <MapView style={styles.map}
+            region={this.state.region}
+            showsUserLocation={true}
+            followUserLocation={true}
+          >
+          {this.state.markers.map(marker => (
+            <MapView.Marker
+              key={marker.latlng.latitude+marker.latlng.longitude}
+              coordinate={marker.latlng}
+              title={marker.title}
+              description={marker.description}
+              //image={require('../../Images/pin.png')}
+            />
+          ))}
+          </MapView>
+
+          <TouchableHighlight style={styles.Button}
+              onPress = {this.showHistory.bind(this)}>
+              <Text style={styles.buttonText}>Historial</Text>
+            </TouchableHighlight> 
+          {(this.state.withClient != 0
+          ? <TouchableHighlight style={[styles.roundButton, {backgroundColor: this.state.withClient == 1 ? 'green' : 'red'}]}
+              onPress = {this.startService.bind(this)}>
+              {this.state.withClient == 1 ? <Text style={styles.buttonText}>Inicio</Text> : <Text style={styles.buttonText}>Fin</Text>}
+            </TouchableHighlight>     
+          : <TouchableHighlight style={[styles.button, {backgroundColor: this.props.vertical.color}]}
+              onPress = {this.onPress.bind(this)}>
+              {this.state.onService ? <Text style={styles.buttonText}>Terminar</Text> : <Text style={styles.buttonText}>Comenzar</Text>}
             </TouchableHighlight>
+          )}
 
-          </View>
-         </View>
-        </Modal>
+        </View>
+      );
+    } else {
+      return(
+          <History vertical={this.props.vertical} user={this.props.user} onBack={()=>this.onBack()}></History>     
+        );
+    }
+  }
 
-        <MapView style={styles.map}
-          region={this.state.region}
-          showsUserLocation={true}
-          followUserLocation={true}
-        >
-        {this.state.markers.map(marker => (
-          <MapView.Marker
-            key={marker.latlng.latitude+marker.latlng.longitude}
-            coordinate={marker.latlng}
-            title={marker.title}
-            description={marker.description}
-            //image={require('../../Images/pin.png')}
-          />
-        ))}
-        </MapView>
+  onBack() {
+    this.setState({History: false})
+  }
 
-        {(this.state.withClient != 0
-        ? <TouchableHighlight style={[styles.roundButton, {backgroundColor: this.state.withClient == 1 ? 'green' : 'red'}]}
-            onPress = {this.startService.bind(this)}>
-            {this.state.withClient == 1 ? <Text style={styles.buttonText}>Inicio</Text> : <Text style={styles.buttonText}>Fin</Text>}
-          </TouchableHighlight>     
-        : <TouchableHighlight style={[styles.button, {backgroundColor: this.props.vertical.color}]}
-            onPress = {this.onPress.bind(this)}>
-            {this.state.onService ? <Text style={styles.buttonText}>Terminar</Text> : <Text style={styles.buttonText}>Comenzar</Text>}
-          </TouchableHighlight>
-        )}
-
-      </View>
-    );
+  showHistory() {
+    this.setState({History: true});
   }
 
   startService() {
@@ -200,7 +221,7 @@ class AppContainer extends React.Component {
             alert('Ya no te encuentras disponible para los clientes.');
           }
         } else {
-          var ws = new WebSocket('ws://yubertransport.mybluemix.net/WebSocketServer/servicio');
+          var ws = new WebSocket('ws://yubertransport.mybluemix.net/WebSocketServer/servicio/' + this.props.vertical.nombre);
           ws.onmessage = ((msg) => {
             mensaje = JSON.parse(String(msg.data));
               if (mensaje.respuesta.command == 'Ok') {
@@ -237,6 +258,8 @@ class AppContainer extends React.Component {
           ws.onopen = () => {
             var obj = '{'
                 +'"command" : "ProveedorDisponible",'
+                +'"userName" : "'+this.props.user.username+'" ,'
+                // +'"Telefono" : '+this.props.user.phone+' ,'
                 +'"lat" : '+this.state.region.latitude+' ,'
                 +'"lng" : '+this.state.region.longitude
                +'}';
