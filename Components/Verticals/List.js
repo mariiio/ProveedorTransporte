@@ -30,7 +30,7 @@ class List extends React.Component {
   }
 
     getVerticals() {
-    fetch('http://yubertransport.mybluemix.net/TransportServices/rest/user/verticales')
+    fetch('http://yubertransport.mybluemix.net/YuberServices/rest/verticales')
       .then((response) => response.json())
       .then((responseData) => {
         verticales = responseData.verticales;

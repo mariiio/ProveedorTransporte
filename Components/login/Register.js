@@ -87,13 +87,13 @@ class Register extends React.Component {
        </Text>; 
     } else {
     this.setState({showProgress: true});
-    console.log('Attempting to register username: ' + this.state.username + ' and password: ' + this.state.password);
 
     var authService = require('./AuthService');
     authService.register({
       username: this.state.username,
       phone: this.state.phone,
-      password: this.state.password
+      password: this.state.password,
+      verticalName: this.props.vertical.name
     }, (results) => {
       this.setState(Object.assign({
           showProgress: false

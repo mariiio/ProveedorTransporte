@@ -20,7 +20,7 @@ var Vertical = React.createClass({
     } else if (this.state.register) {
       return(
         <Register vertical={this.props.vertical} onRegister={()=>this.onRegister()} onLogin={()=>this.onRegister()}></Register>
-      )
+      );
     } else {
       return (
         <Login vertical={this.props.vertical} onRegister={()=>this.onRegister()} onLogin={(user)=>this.onLogin(user)}></Login>

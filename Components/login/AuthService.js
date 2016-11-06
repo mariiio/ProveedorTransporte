@@ -6,16 +6,16 @@ class AuthService {
 		var b = new buffer.Buffer(creds.username + ':' + creds.password);
 		var encodedAuth = b.toString('base64');
 
-		fetch('http://yubertransport.mybluemix.net/TransportServices/rest/user/verticales', { //cambiar por api login
-			// method: 'POST',
-			//   headers: {
-			//     'Accept': 'application/json',
-			//     'Content-Type': 'application/json',
-			//   },
-			//   body: JSON.stringify({
-			//     username: creds.username,
-   //    			password: creds.password
-			//   })
+		fetch('http://yubertransport.mybluemix.net/YuberServices/rest/proveedor/login', {
+			method: 'POST',
+			   headers: {
+			     'Content-Type': 'application/json'
+			   },
+			   body: JSON.stringify({
+			    userName: creds.username,
+       			password: creds.password,
+       			verticalName: 'uber'
+			   })
 	    })
 	    .then((response) => {
 	      if (response.status >= 200 && response.status < 300){
@@ -27,10 +27,9 @@ class AuthService {
 	      }
 	    })
 	    .then((response) => {
-	      return response//.json();
+	      return response;
 	    })
 	    .then((results) => {
-	      console.log('results');
 	      return callback({success: true});
 	    })
 	    .catch((err) => {
@@ -40,17 +39,17 @@ class AuthService {
 
 	register(creds, callback){
 
-		fetch('http://yubertransport.mybluemix.net/TransportServices/rest/user/verticales', { //cambiar por api register
-			// method: 'POST',
-			//   headers: {
-			//     'Accept': 'application/json',
-			//     'Content-Type': 'application/json',
-			//   },
-			//   body: JSON.stringify({
-			//     username: creds.username,
-			//     phone: creds.phone,
-   //    			password: creds.password
-			// })
+		fetch('http://yubertransport.mybluemix.net/YuberServices/rest/proveedor', { 
+			method: 'POST',
+			   headers: {
+			     'Content-Type': 'application/json',
+			   },
+			   body: JSON.stringify({
+			     userName: creds.username,
+			     telefono: creds.phone,
+       			 password: creds.password,
+       			 verticalName: "uber"
+			 })
 	    })
 	    .then((response) => {
 	      if (response.status >= 200 && response.status < 300){
@@ -61,10 +60,9 @@ class AuthService {
 	      }
 	    })
 	    .then((response) => {
-	      return response//.json();
+	      return response;
 	    })
 	    .then((results) => {
-	      console.log('results');
 	      return callback({success: true});
 	    })
 	    .catch((err) => {
