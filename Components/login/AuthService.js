@@ -14,7 +14,7 @@ class AuthService {
 			   body: JSON.stringify({
 			    userName: creds.username,
        			password: creds.password,
-       			verticalName: 'uber'
+       			verticalName: creds.verticalName
 			   })
 	    })
 	    .then((response) => {
@@ -48,7 +48,7 @@ class AuthService {
 			     userName: creds.username,
 			     telefono: creds.phone,
        			 password: creds.password,
-       			 verticalName: "uber"
+       			 verticalName: creds.verticalName
 			 })
 	    })
 	    .then((response) => {
