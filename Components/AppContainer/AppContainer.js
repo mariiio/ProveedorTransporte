@@ -5,7 +5,8 @@ import {
   View,
   TouchableHighlight,
   ActivityIndicator,
-  Modal
+  Modal,
+  Linking
 } from 'react-native';
 import MapView from 'react-native-maps';
 import StarRating from 'react-native-star-rating';
@@ -163,7 +164,10 @@ class AppContainer extends React.Component {
             />
           ))}
           </MapView>
-
+          <TouchableHighlight style={styles.Button}
+              onPress = {this.goToPaypal.bind(this)}>
+              <Text style={styles.buttonText}>PayPal</Text>
+            </TouchableHighlight> 
           <TouchableHighlight style={styles.Button}
               onPress = {this.showHistory.bind(this)}>
               <Text style={styles.buttonText}>Historial</Text>
@@ -172,7 +176,7 @@ class AppContainer extends React.Component {
           ? <TouchableHighlight style={[styles.roundButton, {backgroundColor: this.state.withClient == 1 ? 'green' : 'red'}]}
               onPress = {this.startService.bind(this)}>
               {this.state.withClient == 1 ? <Text style={styles.buttonText}>Inicio</Text> : <Text style={styles.buttonText}>Fin</Text>}
-            </TouchableHighlight>     
+            </TouchableHighlight>
           : <TouchableHighlight style={[styles.button, {backgroundColor: this.props.vertical.color}]}
               onPress = {this.onPress.bind(this)}>
               {this.state.onService ? <Text style={styles.buttonText}>Terminar</Text> : <Text style={styles.buttonText}>Comenzar</Text>}
@@ -194,6 +198,10 @@ class AppContainer extends React.Component {
 
   showHistory() {
     this.setState({History: true});
+  }
+
+  goToPaypal() {
+    Linking.openURL('https://www.sandbox.paypal.com/webscr?cmd=_account&nav=0').catch(err => console.error('An error occurred', err));
   }
 
   startService() {
