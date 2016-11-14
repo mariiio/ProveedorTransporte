@@ -28,9 +28,9 @@ class History extends React.Component {
   }
 
     getHistory() {
-    fetch('http://yubertransport.mybluemix.net/YuberServices/rest/proveedor/' + this.props.user.username + '/servicios', {
+    fetch('http://yuberBackend1.mybluemix.net/YuberServices/rest/proveedor/' + this.props.user.username + '/servicios', {
       headers: {
-        'verticalName': this.props.vertical.nombre
+        'verticalName': this.props.vertical.verticalName
       }
     })
       .then((response) => response.json())

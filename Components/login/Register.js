@@ -93,7 +93,7 @@ class Register extends React.Component {
       username: this.state.username,
       phone: this.state.phone,
       password: this.state.password,
-      verticalName: this.props.vertical.nombre
+      verticalName: this.props.vertical.verticalName
     }, (results) => {
       this.setState(Object.assign({
           showProgress: false

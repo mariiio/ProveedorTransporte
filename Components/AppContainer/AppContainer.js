@@ -138,6 +138,8 @@ class AppContainer extends React.Component {
                 this.setState({withClient: 0});
                 var obj = '{'
                       +'"command" : "FinalizarServicio",'
+                      +'"lat" : '+this.state.region.latitude+' ,'
+                      +'"lng" : '+this.state.region.longitude+' ,'
                       +'"rating" : '+this.state.starCount
                      +'}';
                 this.state.ws.send(obj);
@@ -229,7 +231,7 @@ class AppContainer extends React.Component {
             alert('Ya no te encuentras disponible para los clientes.');
           }
         } else {
-          var ws = new WebSocket('ws://yubertransport.mybluemix.net/WebSocketServer/servicio/' + this.props.vertical.nombre);
+          var ws = new WebSocket('ws://yuberBackend1.mybluemix.net/WebSocketServer/servicio/' + this.props.vertical.verticalName);
           ws.onmessage = ((msg) => {
             mensaje = JSON.parse(String(msg.data));
               if (mensaje.respuesta.command == 'Ok') {
