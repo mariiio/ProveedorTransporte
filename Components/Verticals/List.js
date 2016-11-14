@@ -30,15 +30,14 @@ class List extends React.Component {
   }
 
     getVerticals() {
-    fetch('http://yubertransport.mybluemix.net/YuberServices/rest/verticales')
+    fetch('http://yuberBackend1.mybluemix.net/YuberServices/rest/vertical/all')
       .then((response) => response.json())
       .then((responseData) => {
         verticales = responseData.verticales;
         var nombres = [];
         for (var i = 0; i < verticales.length; i++) {
-          nombres[i] = verticales[i].nombre;
+          nombres[i] = verticales[i].verticalName;
         }
-        console.log(responseData.verticales);
           this.setState({
             dataSource: this.state.dataSource.cloneWithRows(nombres),
             loaded: true,

@@ -6,7 +6,7 @@ class AuthService {
 		var b = new buffer.Buffer(creds.username + ':' + creds.password);
 		var encodedAuth = b.toString('base64');
 
-		fetch('http://yubertransport.mybluemix.net/YuberServices/rest/proveedor/login', {
+		fetch('http://yuberBackend1.mybluemix.net/YuberServices/rest/proveedor/login', {
 			method: 'POST',
 			   headers: {
 			     'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ class AuthService {
 
 	register(creds, callback){
 
-		fetch('http://yubertransport.mybluemix.net/YuberServices/rest/proveedor', { 
+		fetch('http://yuberBackend1.mybluemix.net/YuberServices/rest/proveedor', { 
 			method: 'POST',
 			   headers: {
 			     'Content-Type': 'application/json',

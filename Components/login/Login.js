@@ -80,13 +80,12 @@ class Login extends React.Component {
 
   onLogInPress(){
     this.setState({showProgress: true});
-    console.log('Attempting to log in with username: ' + this.state.username + ' and password: ' + this.state.password);
 
     var authService = require('./AuthService');
     authService.login({
       username: this.state.username,
       password: this.state.password,
-      verticalName: this.props.vertical.nombre
+      verticalName: this.props.vertical.verticalName
     }, (results) => {
       this.setState(Object.assign({
           showProgress: false
