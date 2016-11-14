@@ -86,7 +86,7 @@ class Login extends React.Component {
     authService.login({
       username: this.state.username,
       password: this.state.password,
-      verticalName: this.props.vertical.name
+      verticalName: this.props.vertical.nombre
     }, (results) => {
       this.setState(Object.assign({
           showProgress: false
